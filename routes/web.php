@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/email-list/{emailList}/subscribers/create', [SubscriberController::class, 'create'])->name('subscribers.create');
     Route::post('/email-list/{emailList}/subscribers/create',[SubscriberController::class, 'store']);
     Route::delete('/email-list/{emailList}/subscribers/{subscriber}/', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
+
+    Route::resource('template', TemplateController::class);
 });
 
 require __DIR__.'/auth.php';
