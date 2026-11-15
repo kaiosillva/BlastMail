@@ -12,7 +12,7 @@ class TemplateController extends Controller
     public function index()
     {
         $search = request()->get('search', null);
-        $withTrashed = request()->get('withTrash', false);
+        $withTrashed = request()->get('withTrashed', false);
 
 
         return view('template.index', [
