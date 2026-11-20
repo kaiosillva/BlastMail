@@ -23,7 +23,7 @@ class SubscriberController extends Controller
                     ->orWhere('id', '=', "%$search%")
                 )
                 ->paginate()
-                ->appends(compact('search')),
+                ->appends(compact('search', 'withTrashed')),
             'search' => $search,
             'showTrash' => $showTrash,
         ]);

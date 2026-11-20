@@ -21,10 +21,22 @@ class CampaignController extends Controller
                 ->where('name', 'like', "%$search%")
                 ->orWhere('id', '=', $search)
             )
-            ->paginate(5)
-            ->appends(compact('search')),
+            ->paginate(5) 
+            ->appends(compact('search', 'withTrashed')),
                 'search' => $search,
                 'withTrashed' => $withTrashed,
         ]);
+    }
+
+    public function destroy(Campaign $campaign) {
+        $campaign->delete();
+        return to_route('campaigns.index')
+        ->with('massage', __('Campaign successfuly deleted!'));
+    }
+
+    public function restore(Campaign $campaign) {
+        $campaign->restore();
+        return to_route('campaigns.index')
+        ->with('massage', __('Campaign successfuly restored!'));
     }
 }
