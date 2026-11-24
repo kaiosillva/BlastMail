@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CampaignStoreRequest;
 use App\Models\Campaign;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 
 class CampaignController extends Controller
 {
@@ -17,8 +16,8 @@ class CampaignController extends Controller
 
         return view('campaigns.index', [
             'campaigns' => Campaign::query()
-                ->when($withTrashed, fn(Builder $query) => $query->withTrashed())
-                ->when($search, fn(Builder $query) => $query->where('name', 'like', "%$search%")->orWhere('id', '=', $search))
+                ->when($withTrashed, fn (Builder $query) => $query->withTrashed())
+                ->when($search, fn (Builder $query) => $query->where('name', 'like', "%$search%")->orWhere('id', '=', $search))
                 ->paginate(5)
                 ->appends(compact('search', 'withTrashed')),
             'search' => $search,
@@ -28,7 +27,7 @@ class CampaignController extends Controller
 
     public function create(?string $tab = null)
     {
-        //session()->forget('campaigns::create');
+        // session()->forget('campaigns::create');
 
         return view('campaigns.create', [
             'tab' => $tab,
@@ -38,15 +37,15 @@ class CampaignController extends Controller
                 default => '_config'
             },
             'data' => session()->get('campaigns::create', [
-                'name' =>  null,
-                'subject' =>  null,
+                'name' => null,
+                'subject' => null,
                 'email_list_id' => null,
                 'template_id' => null,
                 'body' => null,
                 'track_click' => null,
                 'track_open' => null,
-                'sent_at' => null
-            ])
+                'send_at' => null,
+            ]),
         ]);
     }
 
@@ -56,7 +55,7 @@ class CampaignController extends Controller
         $data = $request->getData();
         $toRoute = $request->getToRoute();
 
-        if($tab == 'schedule') {
+        if ($tab == 'schedule') {
             Campaign::create($data);
         }
 
@@ -76,6 +75,4 @@ class CampaignController extends Controller
 
         return back()->with('message', __('Campaign successfully restored!'));
     }
-
 }
-

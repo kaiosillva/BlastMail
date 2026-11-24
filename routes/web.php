@@ -5,7 +5,7 @@ use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\TemplateController;
-use App\Models\Campaign;
+use App\Http\Middleware\CampaignCreateSessionControl;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,12 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/email-list/create', [EmailListController::class, 'store']);
     Route::get('/email-list/{emailList}/subscribers', [SubscriberController::class, 'index'])->name('subscribers.index');
     Route::get('/email-list/{emailList}/subscribers/create', [SubscriberController::class, 'create'])->name('subscribers.create');
-    Route::post('/email-list/{emailList}/subscribers/create',[SubscriberController::class, 'store']);
+    Route::post('/email-list/{emailList}/subscribers/create', [SubscriberController::class, 'store']);
     Route::delete('/email-list/{emailList}/subscribers/{subscriber}/', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
 
     Route::resource('templates', TemplateController::class);
     Route::resource('campaigns', CampaignController::class)->only(['index', 'destroy']);
-    Route::get('/campaigns/create/{tab?}', [CampaignController::class, 'create'])->name('campaigns.create');
+    Route::get('/campaigns/create/{tab?}', [CampaignController::class, 'create'])
+        ->middleware(CampaignCreateSessionControl::class)
+        ->name('campaigns.create');
     Route::post('/campaigns/create/{tab?}', [CampaignController::class, 'store']);
     Route::patch('/campaigns/{campaign}/restore', [CampaignController::class, 'restore'])->withTrashed()->name('campaigns.restore');
 });

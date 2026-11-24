@@ -16,6 +16,7 @@ class EmailListController extends Controller
     public function index()
     {
         $search = request()->search;
+        $withTrashed = request()->get('withTrashed', false);
         $emailLists = EmailList::query()
             ->withCount('subscribers')
             ->when($search, fn (Builder $query) => $query
