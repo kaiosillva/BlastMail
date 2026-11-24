@@ -11,4 +11,5 @@ class Campaign extends Model
     /** @use HasFactory<\Database\Factories\CampaignFactory> */
     use HasFactory;
     use SoftDeletes;
+
 }
