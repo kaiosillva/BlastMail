@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Template;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -58,6 +59,11 @@ class CampaignStoreRequest extends FormRequest
             } elseif (filled($newValue)) {
                 $session[$key] = $newValue;
             }
+        }
+
+        if ($templateId = $session['template_id'] && blank($session['body'])) {
+            $template = Template::find($templateId);
+            $session['body'] = $template->body;
         }
         session()->put('campaigns::create', $session);
 
